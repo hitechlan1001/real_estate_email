@@ -37,12 +37,23 @@ export function EmailCard({
   const send = async () => {
     setLoading(true);
     try {
+      const fullText = variants[selected];
+
+      // Extract subject from the text
+      const subjectMatch = fullText.match(/^Subject:\s*(.+)$/m);
+      const subject = subjectMatch
+        ? subjectMatch[1].trim()
+        : `Offer for ${address}`;
+
+      // Remove the subject line from the email body (optional)
+      const body = fullText.replace(/^Subject:.*\n?/m, "").trim();
+
       await fetch("/api/send-email", {
         method: "POST",
         body: JSON.stringify({
           to: email,
-          subject: `Offer for ${address}`,
-          text: variants[selected],
+          subject,
+          text: body,
         }),
       });
       alert("Email sent!");
