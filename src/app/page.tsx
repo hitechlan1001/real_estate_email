@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { EmailCard } from "@/components/EmailCard";
 
 export default function Home() {
-  const [rows, setRows] = useState<any[]>([]);
+  const [rows, setRows] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("/api/fetch-data")
@@ -12,7 +12,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="p-6 space-y-4 bg-gray-900 text-white">
+    <main className="p-6 space-y-4 bg-gray-900 text-white min-h-screen">
       <h1 className="text-xl font-bold">Real Estate Email Bot</h1>
       {rows.map((r, i) => (
         <EmailCard

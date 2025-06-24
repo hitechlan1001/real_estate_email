@@ -1,7 +1,19 @@
 "use client";
 import { useState } from "react";
 
-export function EmailCard({ agentName, address, offer, email, index }: any) {
+export function EmailCard({
+  agentName,
+  address,
+  offer,
+  email,
+  index,
+}: {
+  agentName: string;
+  address: string;
+  offer: string;
+  email: string;
+  index: number;
+}) {
   const [variants, setVariants] = useState<string[]>([]);
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -15,7 +27,7 @@ export function EmailCard({ agentName, address, offer, email, index }: any) {
       });
       const data = await res.json();
       setVariants(data.emails);
-    } catch (err) {
+    } catch {
       alert("Failed to generate email.");
     } finally {
       setLoading(false);
