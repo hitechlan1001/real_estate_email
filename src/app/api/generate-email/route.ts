@@ -15,14 +15,13 @@ export async function POST(req: Request) {
     const emails = await generateEmail(agentName, address, offer);
 
     return NextResponse.json({ emails }, { status: 200 });
-
-  } catch (error: any) {
-    console.error("Error generating emails:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error message:", err.message);
 
     return NextResponse.json(
       {
-        error: error?.message || "Internal Server Error",
-        details: error,
+        error: err.message || "Something went wrong",
       },
       { status: 500 }
     );

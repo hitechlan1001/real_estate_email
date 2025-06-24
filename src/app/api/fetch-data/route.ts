@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server';
-import { fetchSheetData } from '@/lib/google';
+import { NextResponse } from "next/server";
+import { fetchSheetData } from "@/lib/google";
 
 export async function GET() {
   try {
     const data = await fetchSheetData();
 
     return NextResponse.json({ data }, { status: 200 });
-  } catch (error: any) {
-    console.error('Error fetching sheet data:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error message:", err.message);
 
     return NextResponse.json(
       {
-        error: error?.message || 'Failed to fetch Google Sheet data',
-        details: error,
+        error: err.message || "Something went wrong",
       },
       { status: 500 }
     );
