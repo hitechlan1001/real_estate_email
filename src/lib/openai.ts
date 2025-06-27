@@ -6,31 +6,30 @@ export async function generateEmail(
   address: string,
   offer: string
 ) {
-  const baseTemplate = `Send ${agentName} kindly written email about the offer at ${address} with the following summary of terms:
+  const baseTemplate = `Write a short and clear email to ${agentName} about a cash offer for the property at ${address}. 
 
-My client is a very experienced investor in the area and is interested in buying the property you have listed. We can close quickly and we don’t play games. Please get back to us at your earliest convenience. If you have any other properties you’re looking to get a cash offer on, please let us know. We also have experience buying houses sub-to, owner finance, etc., if you believe the property may be better suited for a creative offer.
+Use a natural, confident tone — like a real estate investor who speaks directly. Avoid overly formal or robotic language. Keep it friendly and straightforward, like you'd actually say it in person. Mention that we’re fast and easy to work with, and open to creative deal types. 
 
-We appreciate your consideration and look forward to working with you!
+Put the offer terms in bullet points at the bottom.
 
-Please include the terms summarized before the closing of the email:
-- All cash (3 week closing or at a date of your choosing)
+Terms:
+- All cash (3-week closing or a date that works for you)
 - $${offer}
-- 14 Day due diligence period
+- 14-day due diligence
 - Buyer pays title and closing costs
-- No buyers agent commission
-- 500 dollars earnest money
+- No buyer’s agent commission
+- $500 earnest money
 - Buyer pays survey (if needed)
 
-Thanks,  
-Aaron`;
+Close the email by thanking the agent and saying we’re looking forward to hearing back. Sign as “Aaron”.`;
 
   const instructions = [
     "Rewrite in a friendlier tone",
+    "Write at an 8th grade level",
     "Simplify this email",
-    "Vary the wording the email",
+    "Vary the wording of the email",
     "Rewrite the email",
     "Try again",
-    "Write at an 8th grade level",
   ];
 
   const variations = await Promise.all(
@@ -41,11 +40,11 @@ Aaron`;
           {
             role: "system",
             content:
-              "You are a friendly real estate investor writing natural-sounding, casual emails to agents. Keep it professional but easy to read, with a tone that’s confident, clear, and human.",
+              "You are a friendly real estate investor writing natural, confident, and easy-to-read emails to listing agents. Keep it brief and human.",
           },
           {
             role: "user",
-            content: `${baseTemplate}\n\n${instruction}`,
+            content: `${baseTemplate}\n\nInstruction: ${instruction}`,
           },
         ],
       })
