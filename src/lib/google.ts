@@ -4,16 +4,15 @@ import nodemailer from "nodemailer";
 export async function fetchSheetData() {
   const auth = new google.auth.JWT({
     email: process.env.GOOGLE_CLIENT_EMAIL,
-    key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, "\n").replace(/^"|"$/g, ""),
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });
-
   const sheets = google.sheets({ version: "v4", auth });
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID!,
-    range: "Bot Email Template!A2:N",
+    range: "Sheet1!A2:N",
   });
-
+  console.log(res);
   return res.data.values || [];
 }
 
