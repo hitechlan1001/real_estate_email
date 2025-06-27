@@ -3,67 +3,16 @@ import { useState } from "react";
 
 export function EmailCard({
   agentName,
-  address,
-  offer,
-  email,
+  address, 
   index,
+  preGeneratedVariants = [],
 }: {
   agentName: string;
   address: string;
-  offer: string;
-  email: string;
   index: number;
+  preGeneratedVariants?: string[];
 }) {
-  const [variants, setVariants] = useState<string[]>([]);
   const [selected, setSelected] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  const generate = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/generate-email", {
-        method: "POST",
-        body: JSON.stringify({ agentName, address, offer }),
-      });
-      const data = await res.json();
-      setVariants(data.emails);
-    } catch {
-      alert("Failed to generate email.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const send = async () => {
-    setLoading(true);
-    try {
-      const fullText = variants[selected];
-
-      // Extract subject from the text
-      const subjectMatch = fullText.match(/^Subject:\s*(.+)$/m);
-      const subject = subjectMatch
-        ? subjectMatch[1].trim()
-        : `Offer for ${address}`;
-
-      // Remove the subject line from the email body (optional)
-      const body = fullText.replace(/^Subject:.*\n?/m, "").trim();
-
-      await fetch("/api/send-email", {
-        method: "POST",
-        body: JSON.stringify({
-          to: email,
-          subject,
-          text: body,
-        }),
-      });
-      alert("Email sent!");
-    } catch {
-      alert("Failed to send email.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const labels = [
     "Friendlier Email",
     "8th Grade Level",
@@ -72,52 +21,18 @@ export function EmailCard({
     "Rewritten Email",
     "Alternative Attempt",
   ];
-
   return (
-    <div className="border rounded-xl p-4 shadow">
+    <div className="border rounded-xl p-4 shadow text-white">
       <div className="mb-2 font-semibold">
-        {index + 1} {agentName} — {address}
+        {index + 1}. {agentName} — {address}
       </div>
-
-      <button
-        onClick={generate}
-        disabled={loading}
-        className={`bg-blue-600 text-white px-3 py-1 rounded flex items-center justify-center gap-2 ${
-          loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
-        }`}
-      >
-        {loading && (
-          <svg
-            className="animate-spin h-5 w-5 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            ></path>
-          </svg>
-        )}
-        {loading ? "Generating..." : "Generate Email"}
-      </button>
-
-      {variants.length > 0 && (
+      {preGeneratedVariants.length > 0 && (
         <>
           <select
             onChange={(e) => setSelected(+e.target.value)}
             className="mt-2 block w-full text-black py-1 rounded-sm"
           >
-            {variants.map((_, i) => (
+            {preGeneratedVariants.map((_, i) => (
               <option key={i} value={i}>
                 {labels[i] ?? `Version ${i + 1}`}
               </option>
@@ -125,39 +40,8 @@ export function EmailCard({
           </select>
 
           <pre className="bg-gray-100 text-black p-2 mt-2 whitespace-pre-wrap rounded">
-            {variants[selected]}
+            {preGeneratedVariants[selected]}
           </pre>
-          <button
-            onClick={send}
-            disabled={loading}
-            className={`mt-2 bg-green-600 text-white px-3 py-1 rounded flex items-center justify-center gap-2 ${
-              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
-            }`}
-          >
-            {loading && (
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
-            )}
-            {loading ? "Sending..." : "Send Email"}
-          </button>
         </>
       )}
     </div>
