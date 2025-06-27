@@ -65,7 +65,14 @@ export default function Home() {
 
   const sendAllEmails = async () => {
     setSendingAll(true);
-
+    const labels = [
+      "Friendlier Email",
+      "8th Grade Level",
+      "Simplified Email",
+      "Wording Variation",
+      "Rewritten Email",
+      "Alternative Attempt",
+    ];
     try {
       for (let variantIndex = 0; variantIndex < 6; variantIndex++) {
         for (let i = 0; i < rows.length; i++) {
@@ -90,7 +97,7 @@ export default function Home() {
             });
 
             toast.success(
-              `✅ Sent type ${variantIndex + 1} email to ${email}`,
+              `✅ Sent type ${labels[variantIndex]} email to ${email}`,
               { autoClose: 2000 }
             );
           } catch (err) {
@@ -100,10 +107,11 @@ export default function Home() {
             });
           }
 
-          await new Promise((res) => setTimeout(res, 2000)); // optional delay per email
+          const delay = 15000 + Math.random() * 5000;
+          await new Promise((res) => setTimeout(res, delay)); // optional delay per email
         }
 
-        await new Promise((res) => setTimeout(res, 3000)); // delay between variants
+        await new Promise((res) => setTimeout(res, 5000)); // delay between variants
       }
 
       alert("✅ All emails (by type) sent successfully.");
