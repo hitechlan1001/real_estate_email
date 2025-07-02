@@ -12,7 +12,6 @@ export async function fetchSheetData() {
     spreadsheetId: process.env.GOOGLE_SHEETS_ID!,
     range: "Sheet1!A2:N",
   });
-  console.log(res);
   return res.data.values || [];
 }
 

@@ -24,32 +24,32 @@ Terms:
 Close the email by thanking the agent and saying we’re looking forward to hearing back. Sign as “Aaron”.`;
 
   const instructions = [
-    "Rewrite in a friendlier tone",
+    // "Rewrite in a friendlier tone",
     "Write at an 8th grade level",
     "Simplify this email",
     "Vary the wording of the email",
     "Rewrite the email",
     "Try again",
   ];
+  const randomInstruction =
+    instructions[Math.floor(Math.random() * instructions.length)];
+  const res = await openai.chat.completions.create({
+    model: "gpt-4",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a friendly real estate investor writing natural, confident, and easy-to-read emails to listing agents. Keep it brief and human.",
+      },
+      {
+        role: "user",
+        content: `${baseTemplate}\n\nInstruction: ${randomInstruction}`,
+      },
+    ],
+  });
 
-  const variations = await Promise.all(
-    instructions.map((instruction) =>
-      openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a friendly real estate investor writing natural, confident, and easy-to-read emails to listing agents. Keep it brief and human.",
-          },
-          {
-            role: "user",
-            content: `${baseTemplate}\n\nInstruction: ${instruction}`,
-          },
-        ],
-      })
-    )
-  );
-
-  return variations.map((v) => v.choices[0].message.content);
+  return {
+    instruction: randomInstruction,
+    content: res.choices[0].message.content,
+  };
 }
