@@ -66,14 +66,6 @@ export default function Home() {
 
   const sendAllEmails = async () => {
     setSendingAll(true);
-    const labels = [
-      // "Friendlier Email",
-      "8th Grade Level",
-      "Simplified Email",
-      "Wording Variation",
-      "Rewritten Email",
-      "Alternative Attempt",
-    ];
     try {
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
