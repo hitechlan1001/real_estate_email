@@ -50,7 +50,7 @@ export async function sendEmail({
   });
 
   await transporter.sendMail({
-    from: process.env.GMAIL_SENDER_EMAIL,
+    from: `"Aaron" <info@whitebarninvestments.com>`,
     to,
     subject,
     text,
